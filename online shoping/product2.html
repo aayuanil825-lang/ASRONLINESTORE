@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireless Headphones - Apni Dukaan</title>
+    <link rel="stylesheet" href="main.css">
+<!-- 1. Is code ko product page ke <head> tag ke andar daalein -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init("MiYhtU1dt3BgObrwR"); // ⚠️ Apni Real Public Key daalein
+   })();
+</script>
+
+<!-- Chhoti si CSS styling (Inko bhi <head> ke andar daal sakte hain) -->
+<style>
+    .order-modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+    .modal-content { background-color: #fff; padding: 30px; border-radius: 8px; max-width: 450px; width: 90%; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-family: sans-serif; }
+    .close-btn { position: absolute; right: 15px; top: 10px; font-size: 24px; cursor: pointer; color: #aaa; }
+    .close-btn:hover { color: #000; }
+</style>
+
+
+<!-- 2. Is Popup Form ko </body> tag se thik pehle paste karein -->
+<div id="order-modal" class="order-modal">
+    <div class="modal-content">
+        <span class="close-btn" id="close-modal">&times;</span>
+        <h2 style="text-align: center; margin-bottom: 20px;">Place Your Order</h2>
+        <form id="order-form">
+            <div style="margin-bottom: 15px;">
+                <label style="display:block; margin-bottom:5px; font-weight:bold;">Product Selected:</label>
+                <!-- Iska id 'order-product' hi rakhna -->
+                <input type="text" id="order-product" name="product_name" readonly style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: #e9e9e9; font-weight: bold;" required>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display:block; margin-bottom:5px; font-weight:bold;">Your Name:</label>
+                <input type="text" name="customer_name" placeholder="Apna Naam likhein" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" required>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display:block; margin-bottom:5px; font-weight:bold;">Phone Number:</label>
+                <input type="tel" name="customer_phone" placeholder="Apna Mobile Number" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" required>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display:block; margin-bottom:5px; font-weight:bold;">Delivery Address:</label>
+                <textarea name="customer_address" placeholder="Poora pata (Address) likhein" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" required></textarea>
+            </div>
+            <button type="submit" style="width: 100%; padding: 12px; background: #ff4757; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold;">Confirm Order 🚀</button>
+        </form>
+    </div>
+</div>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo"><a href="index.html" style="color: inherit;">Apni<span>Dukaan</span></a></div>
+        <nav><ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="index.html#products" class="active">Shop</a></li><li><a href="index.html#about">About</a></li><li><a href="index.html#contact">Contact</a></li></ul></nav>
+        <div class="cart-icon"><a href="#">🛒 <span class="cart-count">0</span></a></div>
+    </header>
+
+    <main class="product-details-container">
+        <div class="product-gallery">
+            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Headphones">
+        </div>
+        <div class="product-order-spec">
+            <p class="brand-title">AUDIO SOUNDS</p>
+            <h1>Wireless Headphones Bass Boosted</h1>
+            <div class="rating"><span>⭐ ⭐ ⭐ ⭐ ⭐</span><p>(4.8 out of 5 from 340 customers)</p></div>
+            <p class="product-view-price">₹1,499 <span class="old-price">₹2,999</span> <span class="discount-tag">(50% OFF)</span></p>
+            <p class="product-description">Super powerful bass aur clear sound ke sath wireless headphones.</p>
+            <hr>
+            <div class="selection-section">
+                <h3>Quantity:</h3>
+                <div class="quantity-selector">
+                    <button type="button" class="qty-change-btn" id="minus-btn">-</button>
+                    <input type="number" id="qty-input" value="1" min="1" max="10" readonly>
+                    <button type="button" class="qty-change-btn" id="plus-btn">+</button>
+                </div>
+            </div>
+            <div class="action-buttons-container">
+                <button class="btn-add-to-cart">Add to Cart 🛒</button>
+                <a href="checkout.html" style="flex: 1; text-decoration: none;">
+                    <!-- 🔴 Yahan dhyan se class="buy-now-page-btn" add karein -->
+<button class="buy-now-page-btn" style="width: 100%; margin-top: 15px; padding: 15px; background-color: #ff4757; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer;">
+    Buy Now ⚡
+</button>
+                </a>
+            </div>
+        </div>
+    </main>
+    <footer><p>&copy; 2026 ApniDukaan. All Rights Reserved.</p></footer>
+
+    <script>
+        const minusBtn = document.getElementById('minus-btn');
+        const plusBtn = document.getElementById('plus-btn');
+        const qtyInput = document.getElementById('qty-input');
+        if(plusBtn) { plusBtn.addEventListener('click', () => { if(parseInt(qtyInput.value) < 10) qtyInput.value = parseInt(qtyInput.value) + 1; }); }
+        if(minusBtn) { minusBtn.addEventListener('click', () => { if(parseInt(qtyInput.value) > 1) qtyInput.value = parseInt(qtyInput.value) - 1; }); }
+        
+        const buyNowBtn = document.querySelector('.btn-buy-now');
+        if(buyNowBtn) {
+            buyNowBtn.addEventListener('click', () => {
+                localStorage.setItem('orderedQty', qtyInput.value);
+                localStorage.setItem('productPrice', '1499');
+            });
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout & Payment - Apni Dukaan</title>
+   <link rel="stylesheet" href="main.css">
+   <style>
+       /* Order Success Popup (Modal) Style */
+       .order-success-modal {
+           display: none;
+           position: fixed;
+           top: 0; left: 0; width: 100%; height: 100%;
+           background: rgba(0,0,0,0.6);
+           z-index: 1000;
+           justify-content: center;
+           align-items: center;
+       }
+       .modal-content {
+           background: #fff;
+           padding: 40px 30px;
+           border-radius: 12px;
+           text-align: center;
+           max-width: 450px;
+           width: 90%;
+           box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+           animation: popUp 0.4s ease-out;
+       }
+       @keyframes popUp {
+           from { transform: scale(0.7); opacity: 0; }
+           to { transform: scale(1); opacity: 1; }
+       }
+       .success-icon {
+           font-size: 60px;
+           color: #2ed573;
+           margin-bottom: 15px;
+       }
+       .btn-close-modal {
+           background: #ff4757;
+           color: #fff;
+           border: none;
+           padding: 10px 25px;
+           border-radius: 5px;
+           font-size: 16px;
+           font-weight: bold;
+           cursor: pointer;
+           margin-top: 20px;
+           transition: 0.3s;
+       }
+       .btn-close-modal:hover { background: #e84118; }
+   </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo"><a href="index.html" style="color: inherit;">Apni<span>Dukaan</span></a></div>
+        <nav><ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="index.html#products">Shop</a></li></ul></nav>
+    </header>
+
+    <main class="checkout-container">
+        <div class="checkout-form-section">
+            <h2>Delivery Details 🚚</h2>
+            <form id="orderForm" onsubmit="handleOrder(event)">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="E.g. Rahul Kumar" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Mobile Number</label>
+                    <input type="tel" id="phone" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Full Address</label>
+                    <textarea id="address" placeholder="Apna poora pata likhein (House no, Street, Area, Pincode)" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; height: 80px;"></textarea>
+                </div>
+
+                <div class="payment-method">
+                    <h3>Select Payment Method 💳</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                        <label class="pay-option" style="border: 1px solid #ccc; background: #fff; padding: 12px; display: flex; align-items: center; gap: 10px; border-radius: 5px; cursor: pointer;">
+                            <input type="radio" name="payment" value="COD" checked onclick="togglePaymentDetails('cod')">
+                            <span>💵 Cash on Delivery (COD)</span>
+                        </label>
+                        
+                        <label class="pay-option" style="border: 1px solid #ccc; background: #fff; padding: 12px; display: flex; align-items: center; gap: 10px; border-radius: 5px; cursor: pointer;">
+                            <input type="radio" name="payment" value="UPI" onclick="togglePaymentDetails('upi')">
+                            <span>📱 Pay via UPI / QR Code</span>
+                        </label>
+                    </div>
+
+                    <div id="upi-details-box" style="display: none; margin-top: 15px; padding: 20px; border: 1px dashed #ff4757; background: #fff5f6; border-radius: 8px; text-align: center;">
+                        <p style="font-weight: bold; margin-bottom: 10px; font-size: 16px;">Our UPI ID: <span id="display-upi-id" style="color: #ff4757;">your-vpa@upi</span></p>
+                        
+                        <div style="background: #fff; padding: 10px; width: 180px; height: 180px; margin: 10px auto; border: 1px solid #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <img id="dynamic-qr-img" src="" alt="Generating QR Code..." style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
+                        <p style="font-size: 13px; color: #57606f; font-weight: bold; margin-top: 10px;">👉 Scan & Pay exact amount before submitting order.</p>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-place-order" style="margin-top: 20px;">Place Order Now 🎉</button>
+            </form>
+        </div>
+
+        <div class="order-summary-box">
+            <h2>Order Summary 🛍️</h2>
+            <div class="summary-item"><p>Product Total:</p><p id="summary-prod-total">₹1,999</p></div>
+            <div class="summary-item"><p>Delivery Charges:</p><p style="color: #2ed573; font-weight: 600;">FREE</p></div>
+            <hr>
+            <div class="summary-item total-row"><p>Total Payable:</p><p id="summary-final-total">₹1,999</p></div>
+            <div class="secure-tag"><p>🔒 100% Safe & Secure Checkout</p></div>
+        </div>
+    </main>
+
+    <div id="successModal" class="order-success-modal">
+        <div class="modal-content">
+            <div class="success-icon">✓</div>
+            <h2 style="color: #2f3542; margin-bottom: 10px;">Order Confirmed! 🎉</h2>
+            <p style="color: #57606f; font-size: 15px; line-height: 1.5;">Thank you <span id="customer-name-display" style="font-weight: bold; color: #ff4757;"></span>, aapka order successfully register ho gaya hai. Hum aapse jald hi call par sampark karenge.</p>
+            <button class="btn-close-modal" onclick="closeSuccessPage()">Continue Shopping</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const myUpiId = "8750209585@nyes"; // ⚠️ Apni UPI ID yahan dalein
+            const storeName = "Apni Dukaan";
+
+            document.getElementById('display-upi-id').textContent = myUpiId;
+
+            const qty = parseInt(localStorage.getItem('orderedQty')) || 1;
+            const pricePerItem = parseInt(localStorage.getItem('productPrice')) || 1999;
+            const totalPayable = pricePerItem * qty;
+
+            document.getElementById('summary-prod-total').textContent = `₹${pricePerItem} (x${qty})`;
+            document.getElementById('summary-final-total').textContent = `₹${totalPayable}`;
+
+            // Generate QR Code URL
+            const upiString = `upi://pay?pa=${encodeURIComponent(myUpiId)}&pn=${encodeURIComponent(storeName)}&am=${totalPayable}&cu=INR`;
+            const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiString)}`;
+            document.getElementById('dynamic-qr-img').src = qrImageUrl;
+
+            // Toggle UPI display
+            window.togglePaymentDetails = function(type) {
+                const upiBox = document.getElementById('upi-details-box');
+                upiBox.style.display = (type === 'upi') ? 'block' : 'none';
+            }
+
+            // ⚡ Handle Order WITHOUT WhatsApp redirection
+            window.handleOrder = function(event) {
+                event.preventDefault();
+                const name = document.getElementById('name').value;
+                
+                // Show customer name inside popup and open modal
+                document.getElementById('customer-name-display').textContent = name;
+                document.getElementById('successModal').style.display = 'flex';
+                
+                // Data clean up
+                localStorage.removeItem('orderedQty');
+            }
+
+            // Close Popup and Go Home
+            window.closeSuccessPage = function() {
+                document.getElementById('successModal').style.display = 'none';
+                window.location.href = "index.html";
+            }
+        });
+    </script>
+</body>
+</html>

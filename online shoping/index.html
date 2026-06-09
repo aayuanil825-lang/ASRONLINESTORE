@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASR ONLINE STORE - Online Shopping</title>
+    <link rel="stylesheet" href="main.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          // ⚠️ APNI ACTUAL PUBLIC KEY YAHAN "YOUR_PUBLIC_KEY" KI JAGAH DAALEIN
+          emailjs.init("MiYhtU1dt3BgObrwR"); 
+       })();
+    </script>
+    
+    <style>
+        .order-modal {
+            display: none; 
+            position: fixed; 
+            z-index: 9999; 
+            left: 0; top: 0; 
+            width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.5);
+            align-items: center; 
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fff; 
+            padding: 30px; 
+            border-radius: 8px; 
+            max-width: 450px; 
+            width: 90%; 
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .close-btn {
+            position: absolute; 
+            right: 15px; top: 10px; 
+            font-size: 24px; 
+            cursor: pointer; 
+            color: #aaa;
+        }
+        .close-btn:hover { color: #000; }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">ASR  <span>ONLINE STORE</span></div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#products">Shop</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="cart-icon">
+            <a href="#">🛒 <span class="cart-count">0</span></a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>WELCOME TO ASR ONLINE STORE</h1>
+            <p>Best Products, Best Prices, Fast Delivery!</p>
+            <a href="#products" class="btn-hero">Shop Now 🛍️</a>
+        </div>
+    </section>
+
+    <div class="controls-container">
+        <input type="text" id="product-search" placeholder="Search products here...">
+        <div class="filter-options">
+            <button class="filter-btn active" data-filter="all">All Items</button>
+            <button class="filter-btn" data-filter="electronics">Electronics</button>
+            <button class="filter-btn" data-filter="fashion">Fashion</button>
+        </div>
+    </div>
+
+    <section id="products" class="products-section">
+        <h2>Our Featured Products</h2>
+        
+        <div class="product-grid">
+            <div class="product-card" data-category="electronics">
+                <div class="product-image">
+                    <a href="product.html">
+                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" alt="Product 1">
+                    </a>
+                </div>
+                <div class="product-info">
+                    <h3>Smart Watch</h3>
+                    <p class="price">₹1,999 <span class="old-price">₹3,999</span></p>
+                    <button class="btn-cart">Buy Now 🛍️</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="electronics">
+                <div class="product-image">
+                    <a href="product2.html">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80" alt="Product 2">
+                    </a>
+                </div>
+                <div class="product-info">
+                    <h3>Wireless Headphones</h3>
+                    <p class="price">₹1,499 <span class="old-price">₹2,999</span></p>
+                    <button class="btn-cart">Buy Now 🛍️</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="fashion">
+                <div class="product-image">
+                    <a href="product3.html">
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80" alt="Product 3">
+                    </a>
+                </div>
+                <div class="product-info">
+                    <h3>Premium Sports Shoes</h3>
+                    <p class="price">₹2,499 <span class="old-price">₹4,999</span></p>
+                    <button class="btn-cart">Buy Now 🛍️</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="order-modal" class="order-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal">&times;</span>
+            <h2 style="text-align: center; margin-bottom: 20px;">Place Your Order</h2>
+            <form id="order-form">
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom:5px; font-weight:bold;">Product Selected:</label>
+                    <input type="text" id="order-product" name="product_name" readonly style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: #e9e9e9; font-weight: bold;" required>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom:5px; font-weight:bold;">Your Name:</label>
+                    <input type="text" name="customer_name" placeholder="Apna Naam likhein" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" required>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom:5px; font-weight:bold;">Phone Number:</label>
+                    <input type="tel" name="customer_phone" placeholder="Apna Mobile Number" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" required>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom:5px; font-weight:bold;">Delivery Address:</label>
+                    <textarea name="customer_address" placeholder="Poora pata (Address) likhein" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" required></textarea>
+                </div>
+                <button type="submit" style="width: 100%; padding: 12px; background: #ff4757; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold;">Confirm Order 🚀</button>
+            </form>
+        </div>
+    </div>
+
+    <section id="about" class="about-section">
+        <h2>About Us</h2>
+        <p>Hum aapke liye lekar aate hain behtareen quality ke products. Hamara maqsad aap tak khushiyan pahunchana hai.</p>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <h2>Contact Us</h2>
+        <p>📧 Email: aayuanil825@gmail.com</p>
+        <p style="margin-top: 10px;">📞 Mobile: +91 8750209585</p>
+        <p style="margin-top: 8px; font-style: normal;">📍 Address: Hno-1111 Gali NO-03 Near Mama Bhanja Chowk Kapashera, New Delhi, India - 110037</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 ASR ONLINE STORE. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
